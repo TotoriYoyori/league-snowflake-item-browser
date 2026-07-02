@@ -1,8 +1,9 @@
 """Query builders for the Itemization Explorer.
 
-Mirrors the `src_query.py` pattern from `probability_of_kda`: each query is a
-small typed object that knows how to `.build()` itself into a SQL string. No
-query is executed here — that is the sole job of `src_data.py`.
+Mirrors the `src/query.py` pattern shared with `pipeline_monitor` and
+`role_importance`: each query is a small typed object that knows how to
+`.build()` itself into a SQL string. No query is executed here — that is the
+sole job of `src/data.py`.
 
 The only non-obvious bit is the `Fiddle Sticks` -> `Fiddlesticks` fix: the item
 gold table carries the raw champion name, while the overview table normalises
@@ -11,8 +12,7 @@ it. Without the CASE the join silently drops Fiddlesticks.
 
 from __future__ import annotations
 
-DB = "LEAGUE_RECORDS"
-GOLD = f"{DB}.GOLD"
+from settings import Settings
 
 # A single place to normalise champion names so every query agrees on them.
 CHAMPION_NORMALISE = "CASE WHEN {col} = 'Fiddle Sticks' THEN 'Fiddlesticks' ELSE {col} END"
@@ -33,9 +33,12 @@ class AnalysisQuery:
 class ItemStatsQuery(AnalysisQuery):
     """One row per champion-item, with the champion's total games attached.
 
-    GLOBAL_GAMES_PLAYED is what lets `src_stats` reconstruct the real sample
-    size behind each win rate (effective n = purchase_rate * games_played).
+    GLOBAL_GAMES_PLAYED is what lets `src/stats.py` reconstruct the real
+    sample size behind each win rate (effective n = purchase_rate * games_played).
     """
+
+    def __init__(self, settings: Settings):
+        self._gold = f"{settings.snowflake.database}.{settings.snowflake.schema}"
 
     def build(self) -> str:
         champ = CHAMPION_NORMALISE.format(col="i.CHAMPION")
@@ -52,14 +55,17 @@ class ItemStatsQuery(AnalysisQuery):
                 i.TOP_ITEM_2,
                 i.TOP_ITEM_3,
                 o.GLOBAL_GAMES_PLAYED
-            FROM {GOLD}.ITEM_STATS_AND_RECOMMENDATIONS AS i
-            LEFT JOIN {GOLD}.CHAMPION_OVERVIEW AS o
+            FROM {self._gold}.ITEM_STATS_AND_RECOMMENDATIONS AS i
+            LEFT JOIN {self._gold}.CHAMPION_OVERVIEW AS o
                 ON o.CHAMPION_NAME = {champ}
         """
 
 
 class ChampionOverviewQuery(AnalysisQuery):
     """Champion-level meta used for the picker and the hero header."""
+
+    def __init__(self, settings: Settings):
+        self._gold = f"{settings.snowflake.database}.{settings.snowflake.schema}"
 
     def build(self) -> str:
         return f"""
@@ -71,6 +77,6 @@ class ChampionOverviewQuery(AnalysisQuery):
                 GLOBAL_PICK_RATE,
                 GLOBAL_WIN_RATE,
                 GLOBAL_BAN_RATE
-            FROM {GOLD}.CHAMPION_OVERVIEW
+            FROM {self._gold}.CHAMPION_OVERVIEW
             ORDER BY CHAMPION_NAME
         """

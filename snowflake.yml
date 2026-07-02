@@ -14,12 +14,8 @@ entities:
     main_file: streamlit_app.py
     artifacts:
       - streamlit_app.py
-      - src_query.py
-      - src_data.py
-      - src_stats.py
-      - src_ui.py
-      - src_theme.py
+      - settings.py
+      - src/
       - pyproject.toml
       - .streamlit/config.toml
       - assets/
-      

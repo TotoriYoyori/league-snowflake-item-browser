@@ -1,8 +1,13 @@
 [project]
-name = "itemization_explorer"
+name = "item-browser"
 version = "0.1.0"
-description = "Internal itemization explorer: stats, recommendations, gems and traps."
+description = "Itemization explorer for the league-snowflake medallion pipeline: item stats, recommendations, and gem/trap signal detection."
 requires-python = "~=3.11.0"
 dependencies = [
-    "streamlit[snowflake]"
+    "streamlit[snowflake]",
+    "pandas",
+    "numpy",
 ]
+
+[tool.uv]
+exclude-newer = "7 days"
