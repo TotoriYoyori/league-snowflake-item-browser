@@ -1,0 +1,8 @@
+[project]
+name = "itemization_explorer"
+version = "0.1.0"
+description = "Internal itemization explorer: stats, recommendations, gems and traps."
+requires-python = "~=3.11.0"
+dependencies = [
+    "streamlit[snowflake]"
+]

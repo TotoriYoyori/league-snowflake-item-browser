@@ -1,0 +1,11 @@
+[theme]
+base = "light"
+primaryColor = "#BE9A57"
+backgroundColor = "#F7F2E7"
+secondaryBackgroundColor = "#FBF8F0"
+textColor = "#3D3526"
+font = "serif"
+
+[[theme.fontFaces]]
+family = "ZCOOL XiaoWei"
+url = "assets/ZCOOLXiaoWei-Regular.ttf
