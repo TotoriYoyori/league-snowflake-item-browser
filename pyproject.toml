@@ -10,4 +10,8 @@ dependencies = [
 ]
 
 [tool.uv]
-exclude-newer = "7 days"
+constraint-dependencies = ["numba>=0.56.0"]
+exclude-newer = "2026-07-03T00:00:00Z"
+
+[tool.uv.exclude-newer-package]
+streamlit = false
