@@ -8,14 +8,10 @@ entities:
       name: ITEMS_EXPLORER
     title: ITEMS EXPLORER
     query_warehouse: COMPUTE_WH
-    compute_pool: SYSTEM_COMPUTE_POOL_CPU
-    run_mode: SpcsOnly
-    execute_as: OWNER
     main_file: streamlit_app.py
     artifacts:
       - streamlit_app.py
       - settings.py
       - src/
-      - pyproject.toml
       - .streamlit/config.toml
       - assets/

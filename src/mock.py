@@ -8,17 +8,11 @@ def _read(sample_data_dir: str, name: str) -> pd.DataFrame:
     return pd.read_csv(path)
 
 
-def _normalise_champion(s: pd.Series) -> pd.Series:
-    return s.replace({"Fiddle Sticks": "Fiddlesticks"})
-
-
 def item_stats_and_recommendations(dir_: str) -> pd.DataFrame:
-    """Item stats joined to each champion's GLOBAL_GAMES_PLAYED, reproducing
-    the live query's join + name-normalisation in pandas."""
+    """Item stats joined to each champion's GLOBAL_GAMES_PLAYED (mirrors the live query's join)."""
     items = _read(dir_, "sf_item_stats_and_recommendations")
     overview = _read(dir_, "sf_champion_overview")
 
-    items["CHAMPION"] = _normalise_champion(items["CHAMPION"])
     games = overview[["CHAMPION_NAME", "GLOBAL_GAMES_PLAYED"]].rename(
         columns={"CHAMPION_NAME": "CHAMPION"}
     )

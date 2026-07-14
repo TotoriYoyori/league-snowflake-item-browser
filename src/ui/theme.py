@@ -1,31 +1,37 @@
-"""Custom CSS injected once at app start. Light mode, fixed palette.
+PALETTE = {
+    "red": "#cc1f1f",
+    "dark_red": "#a81818",
+    "amber": "#e08a1e",
+    "green": "#2f9e63",
+    "page_bg": "#f1f1f1",
+    "card_bg": "#ffffff",
+    "card_border": "#e6e6e6",
+    "subtle_border": "#f1f1f1",
+    "thead_bg": "#fafafa",
+    "ink": "#1a1a1a",
+    "ink_soft": "#888888",
+    "ink_faint": "#aaaaaa",
+}
+FONT_MAIN = '"Noto Sans SC", system-ui, sans-serif'
 
-Shares the visual system with `pipeline_monitor` / `role_importance`: dark-red
-accent, Noto Sans SC in the font stack (browser/OS CJK fallback — not
-`@import`ed, same as the other two apps), card-style containers, and pill
-badges for status/signal semantics. Gem/trap flags use the shared
-pill-ok (green) / pill-fail (red) colors rather than a separate jade/vermilion
-palette, so all three apps read as one family.
-"""
 
-from __future__ import annotations
+def hex_to_rgba(hex_color: str, alpha: float) -> str:
+    hex_color = hex_color.lstrip("#")
+    r, g, b = (int(hex_color[i:i + 2], 16) for i in (0, 2, 4))
+    return f"rgba({r}, {g}, {b}, {alpha})"
+
+
+_ROOT_VARS = "\n".join(f"    --{k.replace('_', '-')}: {v};" for k, v in PALETTE.items())
+_ROOT_VARS += f"\n    --font-main: {FONT_MAIN};"
+
+_PILL_OK_BG = hex_to_rgba(PALETTE["green"], 0.12)
+_PILL_WARN_BG = hex_to_rgba(PALETTE["amber"], 0.14)
+_PILL_FAIL_BG = hex_to_rgba(PALETTE["red"], 0.12)
 
 CSS = """
 <style>
 :root {
-    --red: #cc1f1f;
-    --dark-red: #a81818;
-    --amber: #e08a1e;
-    --green: #2f9e63;
-    --page-bg: #f1f1f1;
-    --card-bg: #ffffff;
-    --card-border: #e6e6e6;
-    --subtle-border: #f1f1f1;
-    --thead-bg: #fafafa;
-    --ink: #1a1a1a;
-    --ink-soft: #888888;
-    --ink-faint: #aaaaaa;
-    --font-main: "Noto Sans SC", system-ui, sans-serif;
+""" + _ROOT_VARS + """
 }
 
 html, body, [class*="css"] {
@@ -86,7 +92,7 @@ html, body, [class*="css"] {
     border: 1px solid var(--card-border);
     border-top: 3px solid var(--dark-red);
     background: var(--card-bg);
-    border-radius: 10px;
+    border-radius: 0;
     padding: 18px 22px;
     margin-bottom: 8px;
 }
@@ -109,7 +115,7 @@ html, body, [class*="css"] {
 .ie-pill-stat {
     background: var(--page-bg);
     border: 1px solid var(--card-border);
-    border-radius: 999px;
+    border-radius: 0;
     padding: 5px 13px;
     font-size: 13px;
     color: var(--ink-soft);
@@ -127,18 +133,18 @@ html, body, [class*="css"] {
     font-size: 0.72rem;
     font-weight: 600;
     padding: 2px 10px;
-    border-radius: 999px;
+    border-radius: 0;
     white-space: nowrap;
 }
-.ie-pill-ok { background-color: rgba(47, 158, 99, 0.12); color: var(--green); }
-.ie-pill-warn { background-color: rgba(224, 138, 30, 0.14); color: var(--amber); }
-.ie-pill-fail { background-color: rgba(204, 31, 31, 0.12); color: var(--red); }
+.ie-pill-ok { background-color: __PILL_OK_BG__; color: var(--green); }
+.ie-pill-warn { background-color: __PILL_WARN_BG__; color: var(--amber); }
+.ie-pill-fail { background-color: __PILL_FAIL_BG__; color: var(--red); }
 .ie-pill-neutral { background-color: var(--thead-bg); color: var(--ink-soft); }
 
 /* ---------- Gem / trap signal cards ---------- */
 .ie-card {
     border: 1px solid var(--card-border);
-    border-radius: 10px;
+    border-radius: 0;
     background: var(--card-bg);
     padding: 12px 14px;
     height: 100%;
@@ -171,7 +177,7 @@ html, body, [class*="css"] {
     background: var(--page-bg);
     border: 1px solid var(--card-border);
     color: var(--dark-red);
-    border-radius: 8px;
+    border-radius: 0;
     padding: 5px 11px;
     font-size: 13px;
 }
@@ -208,7 +214,7 @@ html, body, [class*="css"] {
     border: 1px solid var(--card-border);
     border-top: 3px solid var(--dark-red);
     background: var(--card-bg);
-    border-radius: 10px;
+    border-radius: 0;
     padding: 14px 18px;
     min-width: 180px;
 }
@@ -236,7 +242,7 @@ html, body, [class*="css"] {
 .ie-cp-chip {
     border: 1px solid var(--card-border);
     background: var(--card-bg);
-    border-radius: 10px;
+    border-radius: 0;
     padding: 10px 16px;
     font-size: 14px;
     font-weight: 600;
@@ -251,7 +257,7 @@ html, body, [class*="css"] {
     color: #fff;
     font-size: 10px;
     font-weight: 700;
-    border-radius: 999px;
+    border-radius: 0;
     width: 18px;
     height: 18px;
     display: flex;
@@ -285,7 +291,7 @@ html, body, [class*="css"] {
     border: 1px solid var(--card-border);
     border-top: 3px solid var(--dark-red);
     background: var(--card-bg);
-    border-radius: 10px;
+    border-radius: 0;
     padding: 12px 14px;
     flex: 1 1 140px;
     position: relative;
@@ -370,7 +376,7 @@ html, body, [class*="css"] {
 /* ---------- Dataframe tweaks ---------- */
 [data-testid="stDataFrame"] {
     border: 1px solid var(--subtle-border);
-    border-radius: 8px;
+    border-radius: 0;
     overflow: hidden;
     background-color: var(--page-bg);
 }
@@ -389,6 +395,11 @@ html, body, [class*="css"] {
 hr { border-color: var(--card-border); }
 </style>
 """
+CSS = (CSS
+    .replace("__PILL_OK_BG__", _PILL_OK_BG)
+    .replace("__PILL_WARN_BG__", _PILL_WARN_BG)
+    .replace("__PILL_FAIL_BG__", _PILL_FAIL_BG)
+)
 
 
 def inject(st_module) -> None:
