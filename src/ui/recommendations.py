@@ -1,7 +1,3 @@
-"""TAB 2 — Recommendations: item picker + co-purchase chips, and a Best-in-Slot build strip."""
-
-from __future__ import annotations
-
 import html
 
 import pandas as pd

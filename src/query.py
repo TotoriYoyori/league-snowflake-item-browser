@@ -1,9 +1,3 @@
-"""Query builders — each is a frozen pydantic model with a `.build()` method.
-No query is executed here; that's `src/data.py`'s job.
-"""
-
-from __future__ import annotations
-
 from pydantic import BaseModel, ConfigDict
 
 

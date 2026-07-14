@@ -1,7 +1,3 @@
-"""TAB 1 — Item Builds: full stats table + gems/traps signal cards."""
-
-from __future__ import annotations
-
 import html
 
 import pandas as pd

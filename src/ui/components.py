@@ -1,7 +1,3 @@
-"""Shared page chrome: page setup, header, section headers, hero card."""
-
-from __future__ import annotations
-
 import html
 import textwrap
 
