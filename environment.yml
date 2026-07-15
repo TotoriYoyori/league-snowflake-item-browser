@@ -1,0 +1,9 @@
+name: item-browser
+channels:
+  - snowflake
+dependencies:
+  - streamlit
+  - snowflake-snowpark-python
+  - pydantic
+  - pandas
+  - numpy

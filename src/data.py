@@ -1,5 +1,3 @@
-import os
-
 import pandas as pd
 import streamlit as st
 
@@ -7,7 +5,13 @@ from src import mock, query
 
 # --------------- CONSTANTS ---------------
 # SiS session token file only exists inside Snowflake -> use Snowflake live data.
-IS_LOCAL: bool = not os.path.isfile("/snowflake/session/token")
+IS_LOCAL: bool
+try:
+    conn = st.connection("snowflake")
+    IS_LOCAL = False
+except:
+    IS_LOCAL = True
+
 ITEM_STATS_TTL = 6 * 60 * 60
 OVERVIEW_TTL = 60 * 60
 
@@ -16,8 +20,12 @@ OVERVIEW_TTL = 60 * 60
 def get_session():
     if IS_LOCAL:
         return None
+
     conn = st.connection("snowflake", ttl=None)
-    return conn.session()
+    session = conn.session()
+    session.use_warehouse("COMPUTE_WH")
+
+    return session
 
 
 def _run(session, sql: str) -> pd.DataFrame:
