@@ -9,8 +9,8 @@ class ItemStatsQuery(BaseModel):
     def build(self) -> str:
         return """
             SELECT
-                i.CHAMPION,
-                i.ITEM,
+                i.CHAMPION_NAME    AS CHAMPION,
+                i.ITEM_NAME        AS ITEM,
                 i.ITEM_CATEGORY,
                 i.PLAYER_PURCHASE_RATE,
                 i.WIN_RATE,
@@ -20,9 +20,9 @@ class ItemStatsQuery(BaseModel):
                 i.TOP_ITEM_2,
                 i.TOP_ITEM_3,
                 o.GLOBAL_GAMES_PLAYED
-            FROM LEAGUE_RECORDS.GOLD.ITEM_STATS_AND_RECOMMENDATIONS AS i
-            LEFT JOIN LEAGUE_RECORDS.GOLD.CHAMPION_OVERVIEW AS o
-                ON o.CHAMPION_NAME = i.CHAMPION
+            FROM LEAGUE_RECORDS.GOLD.ITEM_RECOMMENDATIONS AS i
+            LEFT JOIN LEAGUE_RECORDS.GOLD.CHAMPION_OVERVIEWS AS o
+                ON o.CHAMPION_NAME = i.CHAMPION_NAME
         """
 
 
@@ -41,6 +41,6 @@ class ChampionOverviewQuery(BaseModel):
                 GLOBAL_PICK_RATE,
                 GLOBAL_WIN_RATE,
                 GLOBAL_BAN_RATE
-            FROM LEAGUE_RECORDS.GOLD.CHAMPION_OVERVIEW
+            FROM LEAGUE_RECORDS.GOLD.CHAMPION_OVERVIEWS
             ORDER BY CHAMPION_NAME
         """
